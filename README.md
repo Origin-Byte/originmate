@@ -1,4 +1,4 @@
-# Originmove
+# Originmate
 
 A library of module building blocks for Move on Sui.
 
