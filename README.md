@@ -32,8 +32,6 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 
 ## Publishing
 
-### Sui
-
 ```
 sui client publish --path ./movemate/sui --gas-budget 30000
 ```
