@@ -42,6 +42,9 @@ jobs:
             # Sets the current package address to "0x0" for publishing
             sed -i "s/$ORIGINAL/$NEW/g" $PACKAGE
 
+            # Test just in case
+            ./sui move test --path $PACKAGE
+
             PUBLISH=`./sui client --client.config .github/config.yaml publish --gas-budget 60000 $PACKAGE --json`
             if [ $? -ne 0 ]; then
                 echo $PUBLISH
