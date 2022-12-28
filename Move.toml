@@ -4,7 +4,7 @@ version = "1.8.0"
 authors = ["David Lucid <david@pentagon.xyz>"]
 
 [addresses]
-originmate = "0x0"
+originmate = "0xe77d108e67d5335751f6489e1ba1142b6eb3fb11"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
