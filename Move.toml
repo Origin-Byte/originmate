@@ -4,10 +4,10 @@ version = "1.8.0"
 authors = ["David Lucid <david@pentagon.xyz>"]
 
 [addresses]
-originmate = "0xe77d108e67d5335751f6489e1ba1142b6eb3fb11"
+originmate = "0x0"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
 subdir = "crates/sui-framework"
-# devnet-0.19.0
-rev = "a8af20d94e951ecfb6d0cd47c23cf6393013d8a8"
+# devnet-0.20.0
+rev = "54b65af123d90d0cbb50111a7ccbcf8c8bc463ca"
