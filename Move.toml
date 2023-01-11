@@ -1,7 +1,12 @@
 [package]
 name = "Originmate"
-version = "1.8.0"
-authors = ["David Lucid <david@pentagon.xyz>"]
+version = "1.9.0"
+authors = [
+    "David Lucid <david@pentagon.xyz>",
+    "Jakub Labor <jakub@originbyte.io>",
+    "Michael Bausano <michael@originbyte.io>",
+    "Nuno Boavida <nuno@originbyte.io>"
+]
 
 [addresses]
 originmate = "0x541d0a32abae6ad8f2a43196cd4a6fc4cf444bf8"
