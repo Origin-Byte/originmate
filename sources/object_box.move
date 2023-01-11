@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: MIT
+
+/// @title object_vec
+/// @dev An implementation of ObjectBag that constrains bag to holding only
+/// one object.
 module originmate::object_box {
     use std::type_name::{Self, TypeName};
 
@@ -5,7 +10,8 @@ module originmate::object_box {
     use sui::object::{Self, UID};
     use sui::tx_context::{TxContext};
 
-    const GENERIC_BAG_FULL: u64 = 0x60700;
+    /// @dev Attempting to add an object to an ObjectBox when it already has one.
+    const GENERIC_BOX_FULL: u64 = 0x60700;
 
     struct ObjectBox has key, store {
         id: UID,
@@ -57,7 +63,7 @@ module originmate::object_box {
         ob: &mut ObjectBox,
         v: V,
     ) {
-        assert!(ob.len == 0, GENERIC_BAG_FULL);
+        assert!(ob.len == 0, GENERIC_BOX_FULL);
 
         dof::add<TypeName, V>(
             &mut ob.id,
