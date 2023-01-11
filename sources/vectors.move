@@ -4,6 +4,8 @@
 module originmate::vectors {
     use std::vector;
 
+    use sui::vec_map::{Self, VecMap};
+
     use originmate::math;
 
     /// @dev When you supply vectors of different lengths to a function requiring equal-length vectors.
@@ -106,6 +108,30 @@ module originmate::vectors {
         };
 
         true
+    }
+
+    public fun from_vec_to_map<K: copy + drop, V: drop>(
+        keys: vector<K>,
+        values: vector<V>,
+    ): VecMap<K, V> {
+        let i = 0;
+        let n = vector::length(&keys);
+        let map = vec_map::empty<K, V>();
+
+        while (i < n) {
+            let key = vector::pop_back(&mut keys);
+            let value = vector::pop_back(&mut values);
+
+            vec_map::insert(
+                &mut map,
+                key,
+                value,
+            );
+
+            i = i + 1;
+        };
+
+        map
     }
 
     #[test]
