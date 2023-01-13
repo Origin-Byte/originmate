@@ -29,6 +29,7 @@ jobs:
       - name: Publish changed packages
         run: |
           COMMIT_MSG="Published"
+          BRANCH="publish/"
 
           for PACKAGE in `find . -name Move.toml`
           do
@@ -50,15 +51,17 @@ jobs:
                 echo $PUBLISH
                 exit 1
             fi
-            
+
             OBJECT=`echo $PUBLISH | jq '.effects.created[0].reference.objectId'`
 
             sed -i "s/$NEW/$NAME = $OBJECT/g" $PACKAGE
 
             COMMIT_MSG+=" $NAME ($VERSION)"
+            BRANCH+="$NAME($VERSION)"
           done
 
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
+          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
 
       - name: Cleanup
         run: |
@@ -69,6 +72,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          commit-message: ${{ env.COMMIT_MSG }}
+          commit-message: "[skip ci] ${{ env.COMMIT_MSG }}"
           committer: OriginByte <ci@originbyte.io>
           title: ${{ env.COMMIT_MSG }}
+          branch: ${{ env.BRANCH }}
