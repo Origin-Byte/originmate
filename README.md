@@ -33,5 +33,21 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 ## Publishing
 
 ```
-sui client publish --path ./movemate/sui --gas-budget 30000
+./bin/publish.sh
+```
+
+If you get error _"Modules must all have 0x0 as their addresses."_ you first need to change the `originmate` in `Move.toml` to `0x0`.
+Then you can run the publish script again.
+This will yield a new address where the contract is deployed.
+We hard code the address to `Move.toml` in order for other packages to be able
+to use this package as a dependency.
+
+## Usage
+
+Add following dependency to your `Move.toml`:
+
+```toml
+[dependencies.Originmate]
+git = "https://github.com/Origin-Byte/originmate.git"
+rev = "<<git commit you'd like to use as a dependency>>"
 ```
