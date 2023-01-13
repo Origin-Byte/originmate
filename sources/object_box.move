@@ -4,6 +4,10 @@
 /// @dev An implementation of ObjectBag that constrains bag to holding only
 /// one object.
 module originmate::object_box {
+    // TODO: Would be good to rename to ObjectField and create a second 
+    // Field which does not require key. Would allow users to mark dynamic
+    // fields explicitly.
+    // TODOS: Tests
     use std::type_name::{Self, TypeName};
 
     use sui::dynamic_object_field as dof;
@@ -15,6 +19,7 @@ module originmate::object_box {
 
     struct ObjectBox has key, store {
         id: UID,
+        // TODO: Change to bool
         len: u64,
     }
 
