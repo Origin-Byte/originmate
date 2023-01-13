@@ -70,11 +70,13 @@ module originmate::object_box {
             type_name::get<V>(),
             v,
         );
+        ob.len = ob.len + 1;
     }
 
     public fun remove<V: store + key>(
         ob: &mut ObjectBox,
     ): V {
+        ob.len = ob.len - 1;
         dof::remove<TypeName, V>(&mut ob.id, type_name::get<V>())
     }
 
