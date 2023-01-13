@@ -29,6 +29,8 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 - `to_string`: `u128` to `String` conversion utilities.
 - `vectors`: Vector utilities--specifically, comparison operators and a binary search function.
 - `virtual_block`: Replace latency auctions with gas auctions (with control over MEV rewards) via virtual blocks.
+- `object_box`: An implementation of ObjectBag that constrains bag to holding only one object.
+- `object_vec`: An implementation ObjectTable that does not require a generic for key and it uses indexing.
 
 ## Publishing
 
