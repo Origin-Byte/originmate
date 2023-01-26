@@ -1,6 +1,6 @@
 [package]
 name = "Originmate"
-version = "2.0.0"
+version = "2.2.0"
 authors = [
     "David Lucid <david@pentagon.xyz>",
     "Jakub Labor <jakub@originbyte.io>",
