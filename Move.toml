@@ -1,6 +1,6 @@
 [package]
 name = "Originmate"
-version = "2.0.0"
+version = "2.2.0"
 authors = [
     "David Lucid <david@pentagon.xyz>",
     "Jakub Labor <jakub@originbyte.io>",
@@ -9,7 +9,7 @@ authors = [
 ]
 
 [addresses]
-originmate = "0xf6db1103fca4dd46798f61ebb261db91c71d5a1f"
+originmate = "0x"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
