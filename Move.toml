@@ -9,10 +9,10 @@ authors = [
 ]
 
 [addresses]
-originmate = "0x0bbf20c3ae35261790aa047592212bfaf43f0b6c"
+originmate = "0x71d0659d0426b0dffc6dfb3767c3f64efbc7561b"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
 subdir = "crates/sui-framework"
-# devnet-0.23.0
-rev = "cece99272f261d046c64510812e36404e7deb661"
+# devnet-0.22.0
+rev = "e3e28e09ffb7943aa4b46b65e12b630ef36161ef"
