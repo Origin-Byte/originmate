@@ -9,7 +9,7 @@ authors = [
 ]
 
 [addresses]
-originmate = "0x"
+originmate = "0x13ba25e1e2defedc54ae3e7bc6cfa6dd8303b948"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
