@@ -8,11 +8,11 @@ authors = [
     "Nuno Boavida <nuno@originbyte.io>"
 ]
 
-[addresses]
-originmate = "0xdc4ec884a04342b4bfc5bef81dcff1cc23473805"
-
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
 subdir = "crates/sui-framework"
-# devnet-0.27.0
-rev = "598f106ef5fbdfbe1b644236f0caf46c94f4d1b7"
+# devnet-0.27.1
+rev = "157ac72030d014f17d76cefe81f3915b4afab2c9"
+
+[addresses]
+originmate = "0x38b71d8c6bd2081fe9496a199355faaa675f84ed"
