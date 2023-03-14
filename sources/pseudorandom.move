@@ -21,133 +21,122 @@ module originmate::pseudorandom {
 
     const EHIGH_ARG_GREATER_THAN_LOW_ARG: u64 = 1;
 
-    /// Resource that wraps an integer counter.
+    /// Resource that wraps an integer counter
     struct Counter has key {
         id: UID,
         value: u256
     }
 
-    /// Share a `Counter` resource with value `i`.
+    /// Share a `Counter` resource with value `i`
     fun init(ctx: &mut TxContext) {
         // Create and share a Counter resource. This is a privileged operation that
         // can only be done inside the module that declares the `Counter` resource
         transfer::share_object(Counter { id: object::new(ctx), value: 0 });
     }
 
-    /// Increment the value of the supplied `Counter` resource.
+    /// Increment the value of the supplied `Counter` resource
     fun increment(counter: &mut Counter): u256 {
         let c_ref = &mut counter.value;
         *c_ref = *c_ref + 1;
         *c_ref
     }
 
-    /// Acquire a seed using: the hash of the counter, epoch, sender address, and new object ID.
-    public fun seed(sender: &address, counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
-        let counter_val = increment(counter);
-        let counter_bytes = bcs::to_bytes(&counter_val);
-
-        let epoch = tx_context::epoch(ctx);
-        let epoch_bytes = bcs::to_bytes(&epoch);
-
-        let sender_bytes = bcs::to_bytes(sender);
-
-        let uid = object::new(ctx);
-        let object_id_bytes = object::uid_to_bytes(&uid);
-        object::delete(uid);
-
-        let info = vector::empty();
-        vector::append(&mut info, counter_bytes);
-        vector::append(&mut info, sender_bytes);
-        vector::append(&mut info, epoch_bytes);
-        vector::append(&mut info, object_id_bytes);
-
-        hash::sha3_256(info)
+    /// Acquire pseudo-random value using `Counter`, transaction primitives,
+    /// and user-provided nonce
+    public fun rand(
+        nonce: vector<u8>,
+        counter: &mut Counter,
+        ctx: &mut TxContext,
+    ): vector<u8> {
+        vector::append(&mut nonce, nonce_counter(counter));
+        vector::append(&mut nonce, nonce_primitives(ctx));
+        rand_with_nonce(nonce)
     }
 
-    /// Acquire a seed using: the hash of the epoch, sender address, and new object ID.
-    public fun seed_no_counter(sender: &address, ctx: &mut TxContext): vector<u8> {
-        let epoch = tx_context::epoch(ctx);
-        let epoch_bytes = bcs::to_bytes(&epoch);
-
-        let sender_bytes = bcs::to_bytes(sender);
-
-        let uid = object::new(ctx);
-        let object_id_bytes = object::uid_to_bytes(&uid);
-        object::delete(uid);
-
-        let info = vector::empty();
-        vector::append(&mut info, sender_bytes);
-        vector::append(&mut info, epoch_bytes);
-        vector::append(&mut info, object_id_bytes);
-
-        hash::sha3_256(info)
+    /// Acquire pseudo-random value using transaction primitives and
+    /// user-provided nonce
+    public fun rand_no_counter(
+        nonce: vector<u8>,
+        ctx: &mut TxContext,
+    ): vector<u8> {
+        vector::append(&mut nonce, nonce_primitives(ctx));
+        rand_with_nonce(nonce)
     }
 
-    /// Acquire a seed using: the hash of the counter, epoch, sender address, and new object ID.
-    public fun seed_no_address(counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
-        let counter_val = increment(counter);
-        let counter_bytes = bcs::to_bytes(&counter_val);
-
-        let epoch = tx_context::epoch(ctx);
-        let epoch_bytes = bcs::to_bytes(&epoch);
-
-        let sender_bytes = bcs::to_bytes(&tx_context::sender(ctx));
-
-        let uid = object::new(ctx);
-        let object_id_bytes = object::uid_to_bytes(&uid);
-        object::delete(uid);
-
-        let info = vector::empty();
-        vector::append(&mut info, counter_bytes);
-        vector::append(&mut info, sender_bytes);
-        vector::append(&mut info, epoch_bytes);
-        vector::append(&mut info, object_id_bytes);
-
-        hash::sha3_256(info)
+    /// Acquire pseudo-random value using `Counter` and transaction primitives
+    ///
+    /// It is recommended that the user use a method that allows passing a
+    /// custom nonce that would allow greater randomization.
+    public fun rand_no_nonce(
+        counter: &mut Counter,
+        ctx: &mut TxContext,
+    ): vector<u8> {
+        let nonce = vector::empty();
+        vector::append(&mut nonce, nonce_counter(counter));
+        vector::append(&mut nonce, nonce_primitives(ctx));
+        rand_with_nonce(nonce)
     }
 
-    /// Acquire a seed using: the hash of the counter and sender address.
-    public fun seed_no_ctx(sender: &address, counter: &mut Counter): vector<u8> {
-        let counter_val = increment(counter);
-        let counter_bytes = bcs::to_bytes(&counter_val);
-
-        let sender_bytes = bcs::to_bytes(sender);
-
-        let info = vector::empty();
-        vector::append(&mut info, counter_bytes);
-        vector::append(&mut info, sender_bytes);
-
-        hash::sha3_256(info)
+    /// Acquire pseudo-random value using `Counter` and user-provided nonce
+    public fun rand_no_ctx(
+        nonce: vector<u8>,
+        counter: &mut Counter,
+    ): vector<u8> {
+        vector::append(&mut nonce, nonce_counter(counter));
+        rand_with_nonce(nonce)
     }
 
-    /// Acquire a seed using: the hash of the counter.
-    public fun seed_with_counter(counter: &mut Counter): vector<u8> {
-        let counter_val = increment(counter);
-        let counter_bytes = bcs::to_bytes(&counter_val);
-
-        hash::sha3_256(counter_bytes)
+    /// Acquire pseudo-random value using `Counter`
+    ///
+    /// It is recommended that the user use a method that allows passing a
+    /// custom nonce that would allow greater randomization, or at least
+    /// use more than one source of randomness.
+    public fun rand_with_counter(counter: &mut Counter): vector<u8> {
+        let nonce = vector::empty();
+        vector::append(&mut nonce, nonce_counter(counter));
+        rand_with_nonce(nonce)
     }
 
-    /// Acquire a seed using: the hash of the epoch, sender address, and a new object ID.
-    public fun seed_with_ctx(ctx: &mut TxContext): vector<u8> {
-        let epoch = tx_context::epoch(ctx);
-        let epoch_bytes = bcs::to_bytes(&epoch);
+    /// Acquire pseudo-random value using transaction primitives
+    ///
+    /// It is recommended that the user use a method that allows passing a
+    /// custom nonce that would allow greater randomization, or at least
+    /// use more than one source of randomness.
+    public fun rand_with_ctx(ctx: &mut TxContext): vector<u8> {
+        let nonce = vector::empty();
+        vector::append(&mut nonce, nonce_primitives(ctx));
+        rand_with_nonce(nonce)
+    }
 
-        let sender_bytes = bcs::to_bytes(&tx_context::sender(ctx));
-
-        let uid = object::new(ctx);
-        let object_id_bytes = object::uid_to_bytes(&uid);
-        object::delete(uid);
-
-        let info = vector::empty();
-        vector::append(&mut info, sender_bytes);
-        vector::append(&mut info, epoch_bytes);
-        vector::append(&mut info, object_id_bytes);
-
-        hash::sha3_256(info)
+    /// Acquire pseudo-random value using user-provided nonce
+    ///
+    /// It is recommended that the user use at least more than one source of
+    /// randomness.
+    public fun rand_with_nonce(nonce: vector<u8>): vector<u8> {
+        hash::sha3_256(nonce)
     }
 
     // === Helpers ===
+
+    /// Generate nonce from transaction primitives
+    fun nonce_primitives(ctx: &mut TxContext): vector<u8> {
+        let uid = object::new(ctx);
+        let object_nonce = object::uid_to_bytes(&uid);
+        object::delete(uid);
+
+        let epoch_nonce = bcs::to_bytes(&tx_context::epoch(ctx));
+        let sender_nonce = bcs::to_bytes(&tx_context::sender(ctx));
+
+        vector::append(&mut object_nonce, epoch_nonce);
+        vector::append(&mut object_nonce, sender_nonce);
+
+        object_nonce
+    }
+
+    /// Generate nonce from `Counter`
+    fun nonce_counter(counter: &mut Counter): vector<u8> {
+        bcs::to_bytes(&increment(counter))
+    }
 
     /// Deserialize `u8` from BCS bytes
     public fun bcs_u8_from_bytes(bytes: vector<u8>): u8 {
