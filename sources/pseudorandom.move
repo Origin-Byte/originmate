@@ -3,31 +3,28 @@
 
 /// @title pseudorandom
 /// @notice A pseudo random module on-chain.
-/// @dev Warning: 
-/// The random mechanism in smart contracts is different from 
-/// that in traditional programming languages. The value generated 
-/// by random is predictable to Miners, so it can only be used in 
-/// simple scenarios where Miners have no incentive to cheat. If 
-/// large amounts of money are involved, DO NOT USE THIS MODULE to 
+/// @dev Warning:
+/// The random mechanism in smart contracts is different from
+/// that in traditional programming languages. The value generated
+/// by random is predictable to Miners, so it can only be used in
+/// simple scenarios where Miners have no incentive to cheat. If
+/// large amounts of money are involved, DO NOT USE THIS MODULE to
 /// generate random numbers; try a more secure way.
 module originmate::pseudorandom {
-    use std::bcs;
     use std::hash;
     use std::vector;
 
+    use sui::bcs;
     use sui::object::{Self, UID};
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
 
-    use originmate::bcd;
-
-    const ENOT_ROOT: u64 = 0x10000;
-    const EHIGH_ARG_GREATER_THAN_LOW_ARG: u64 = 0x10001;
+    const EHIGH_ARG_GREATER_THAN_LOW_ARG: u64 = 1;
 
     /// Resource that wraps an integer counter.
     struct Counter has key {
         id: UID,
-        value: u64
+        value: u256
     }
 
     /// Share a `Counter` resource with value `i`.
@@ -38,175 +35,206 @@ module originmate::pseudorandom {
     }
 
     /// Increment the value of the supplied `Counter` resource.
-    fun increment(counter: &mut Counter): u64 {
+    fun increment(counter: &mut Counter): u256 {
         let c_ref = &mut counter.value;
         *c_ref = *c_ref + 1;
         *c_ref
     }
 
     /// Acquire a seed using: the hash of the counter, epoch, sender address, and new object ID.
-    fun seed(sender: &address, counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
+    public fun seed(sender: &address, counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
         let counter_val = increment(counter);
         let counter_bytes = bcs::to_bytes(&counter_val);
 
-        let epoch: u64 = tx_context::epoch(ctx);
-        let epoch_bytes: vector<u8> = bcs::to_bytes(&epoch);
+        let epoch = tx_context::epoch(ctx);
+        let epoch_bytes = bcs::to_bytes(&epoch);
 
-        let sender_bytes: vector<u8> = bcs::to_bytes(sender);
+        let sender_bytes = bcs::to_bytes(sender);
 
         let uid = object::new(ctx);
-        let object_id_bytes: vector<u8> = object::uid_to_bytes(&uid);
+        let object_id_bytes = object::uid_to_bytes(&uid);
         object::delete(uid);
 
-        let info: vector<u8> = vector::empty<u8>();
-        vector::append<u8>(&mut info, counter_bytes);
-        vector::append<u8>(&mut info, sender_bytes);
-        vector::append<u8>(&mut info, epoch_bytes);
-        vector::append<u8>(&mut info, object_id_bytes);
+        let info = vector::empty();
+        vector::append(&mut info, counter_bytes);
+        vector::append(&mut info, sender_bytes);
+        vector::append(&mut info, epoch_bytes);
+        vector::append(&mut info, object_id_bytes);
 
-        let hash: vector<u8> = hash::sha3_256(info);
-        hash
+        hash::sha3_256(info)
     }
 
     /// Acquire a seed using: the hash of the epoch, sender address, and new object ID.
-    fun seed_no_counter(sender: &address, ctx: &mut TxContext): vector<u8> {
-        let epoch: u64 = tx_context::epoch(ctx);
-        let epoch_bytes: vector<u8> = bcs::to_bytes(&epoch);
+    public fun seed_no_counter(sender: &address, ctx: &mut TxContext): vector<u8> {
+        let epoch = tx_context::epoch(ctx);
+        let epoch_bytes = bcs::to_bytes(&epoch);
 
-        let sender_bytes: vector<u8> = bcs::to_bytes(sender);
+        let sender_bytes = bcs::to_bytes(sender);
 
         let uid = object::new(ctx);
-        let object_id_bytes: vector<u8> = object::uid_to_bytes(&uid);
+        let object_id_bytes = object::uid_to_bytes(&uid);
         object::delete(uid);
 
-        let info: vector<u8> = vector::empty<u8>();
-        vector::append<u8>(&mut info, sender_bytes);
-        vector::append<u8>(&mut info, epoch_bytes);
-        vector::append<u8>(&mut info, object_id_bytes);
+        let info = vector::empty();
+        vector::append(&mut info, sender_bytes);
+        vector::append(&mut info, epoch_bytes);
+        vector::append(&mut info, object_id_bytes);
 
-        let hash: vector<u8> = hash::sha3_256(info);
-        hash
+        hash::sha3_256(info)
     }
 
     /// Acquire a seed using: the hash of the counter, epoch, sender address, and new object ID.
-    fun seed_no_address(counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
+    public fun seed_no_address(counter: &mut Counter, ctx: &mut TxContext): vector<u8> {
         let counter_val = increment(counter);
         let counter_bytes = bcs::to_bytes(&counter_val);
 
-        let epoch: u64 = tx_context::epoch(ctx);
-        let epoch_bytes: vector<u8> = bcs::to_bytes(&epoch);
+        let epoch = tx_context::epoch(ctx);
+        let epoch_bytes = bcs::to_bytes(&epoch);
 
-        let sender_bytes: vector<u8> = bcs::to_bytes(&tx_context::sender(ctx));
+        let sender_bytes = bcs::to_bytes(&tx_context::sender(ctx));
 
         let uid = object::new(ctx);
-        let object_id_bytes: vector<u8> = object::uid_to_bytes(&uid);
+        let object_id_bytes = object::uid_to_bytes(&uid);
         object::delete(uid);
 
-        let info: vector<u8> = vector::empty<u8>();
-        vector::append<u8>(&mut info, counter_bytes);
-        vector::append<u8>(&mut info, sender_bytes);
-        vector::append<u8>(&mut info, epoch_bytes);
-        vector::append<u8>(&mut info, object_id_bytes);
+        let info = vector::empty();
+        vector::append(&mut info, counter_bytes);
+        vector::append(&mut info, sender_bytes);
+        vector::append(&mut info, epoch_bytes);
+        vector::append(&mut info, object_id_bytes);
 
-        let hash: vector<u8> = hash::sha3_256(info);
-        hash
+        hash::sha3_256(info)
     }
 
     /// Acquire a seed using: the hash of the counter and sender address.
-    fun seed_no_ctx(sender: &address, counter: &mut Counter): vector<u8> {
+    public fun seed_no_ctx(sender: &address, counter: &mut Counter): vector<u8> {
         let counter_val = increment(counter);
         let counter_bytes = bcs::to_bytes(&counter_val);
 
-        let sender_bytes: vector<u8> = bcs::to_bytes(sender);
+        let sender_bytes = bcs::to_bytes(sender);
 
-        let info: vector<u8> = vector::empty<u8>();
-        vector::append<u8>(&mut info, counter_bytes);
-        vector::append<u8>(&mut info, sender_bytes);
+        let info = vector::empty();
+        vector::append(&mut info, counter_bytes);
+        vector::append(&mut info, sender_bytes);
 
-        let hash: vector<u8> = hash::sha3_256(info);
-        hash
+        hash::sha3_256(info)
     }
 
     /// Acquire a seed using: the hash of the counter.
-    fun seed_with_counter(counter: &mut Counter): vector<u8> {
+    public fun seed_with_counter(counter: &mut Counter): vector<u8> {
         let counter_val = increment(counter);
         let counter_bytes = bcs::to_bytes(&counter_val);
 
-        let hash: vector<u8> = hash::sha3_256(counter_bytes);
-        hash
+        hash::sha3_256(counter_bytes)
     }
 
     /// Acquire a seed using: the hash of the epoch, sender address, and a new object ID.
-    fun seed_with_ctx(ctx: &mut TxContext): vector<u8> {
-        let epoch: u64 = tx_context::epoch(ctx);
-        let epoch_bytes: vector<u8> = bcs::to_bytes(&epoch);
+    public fun seed_with_ctx(ctx: &mut TxContext): vector<u8> {
+        let epoch = tx_context::epoch(ctx);
+        let epoch_bytes = bcs::to_bytes(&epoch);
 
-        let sender_bytes: vector<u8> = bcs::to_bytes(&tx_context::sender(ctx));
+        let sender_bytes = bcs::to_bytes(&tx_context::sender(ctx));
 
         let uid = object::new(ctx);
-        let object_id_bytes: vector<u8> = object::uid_to_bytes(&uid);
+        let object_id_bytes = object::uid_to_bytes(&uid);
         object::delete(uid);
 
-        let info: vector<u8> = vector::empty<u8>();
-        vector::append<u8>(&mut info, sender_bytes);
-        vector::append<u8>(&mut info, epoch_bytes);
-        vector::append<u8>(&mut info, object_id_bytes);
+        let info = vector::empty();
+        vector::append(&mut info, sender_bytes);
+        vector::append(&mut info, epoch_bytes);
+        vector::append(&mut info, object_id_bytes);
 
-        let hash: vector<u8> = hash::sha3_256(info);
-        hash
+        hash::sha3_256(info)
     }
 
-    /// Generate a random u128
-    public fun rand_u128_with_seed(_seed: vector<u8>): u128 {
-        bcd::bytes_to_u128(_seed)
+    // === Helpers ===
+
+    /// Deserialize `u8` from BCS bytes
+    public fun bcs_u8_from_bytes(bytes: vector<u8>): u8 {
+        bcs::peel_u8(&mut bcs::new(bytes))
     }
 
-    /// Generate a random integer range in [low, high).
-    public fun rand_u128_range_with_seed(_seed: vector<u8>, low: u128, high: u128): u128 {
-        assert!(high > low, EHIGH_ARG_GREATER_THAN_LOW_ARG);
-        let value = rand_u128_with_seed(_seed);
-        (value % (high - low)) + low
+    /// Deserialize `u64` from BCS bytes
+    public fun bcs_u64_from_bytes(bytes: vector<u8>): u64 {
+        bcs::peel_u64(&mut bcs::new(bytes))
     }
 
-    /// Generate a random u64
-    public fun rand_u64_with_seed(_seed: vector<u8>): u64 {
-        bcd::bytes_to_u64(_seed)
+    /// Deserialize `u128` from BCS bytes
+    public fun bcs_u128_from_bytes(bytes: vector<u8>): u128 {
+        bcs::peel_u128(&mut bcs::new(bytes))
     }
 
-    /// Generate a random integer range in [low, high).
-    public fun rand_u64_range_with_seed(_seed: vector<u8>, low: u64, high: u64): u64 {
-        assert!(high > low, EHIGH_ARG_GREATER_THAN_LOW_ARG);
-        let value = rand_u64_with_seed(_seed);
-        (value % (high - low)) + low
+    /// Transpose bytes into `u8`
+    ///
+    /// Zero byte will be used for empty vector.
+    public fun u8_from_bytes(bytes: &vector<u8>): u8 {
+        if (vector::length(bytes) > 0) {
+            *vector::borrow(bytes, 0)
+        } else {
+            0
+        }
     }
 
-    public fun rand_u128(sender: &address, counter: &mut Counter, ctx: &mut TxContext): u128 { rand_u128_with_seed(seed(sender, counter, ctx)) }
-    public fun rand_u128_range(sender: &address, counter: &mut Counter, low: u128, high: u128, ctx: &mut TxContext): u128 { rand_u128_range_with_seed(seed(sender, counter, ctx), low, high) }
-    public fun rand_u64(sender: &address, counter: &mut Counter, ctx: &mut TxContext): u64 { rand_u64_with_seed(seed(sender, counter, ctx)) }
-    public fun rand_u64_range(sender: &address, counter: &mut Counter, low: u64, high: u64, ctx: &mut TxContext): u64 { rand_u64_range_with_seed(seed(sender, counter, ctx), low, high) }
+    /// Transpose bytes into `u64`
+    ///
+    /// Zero bytes will be used for vectors shorter than 8 bytes
+    public fun u64_from_bytes(bytes: &vector<u8>): u64 {
+        let m: u64 = 0;
 
-    public fun rand_u128_no_counter(sender: &address, ctx: &mut TxContext): u128 { rand_u128_with_seed(seed_no_counter(sender, ctx)) }
-    public fun rand_u128_range_no_counter(sender: &address, low: u128, high: u128, ctx: &mut TxContext): u128 { rand_u128_range_with_seed(seed_no_counter(sender, ctx), low, high) }
-    public fun rand_u64_no_counter(sender: &address, ctx: &mut TxContext): u64 { rand_u64_with_seed(seed_no_counter(sender, ctx)) }
-    public fun rand_u64_range_no_counter(sender: &address, low: u64, high: u64, ctx: &mut TxContext): u64 { rand_u64_range_with_seed(seed_no_counter(sender, ctx), low, high) }
+        // Cap length at 16 bytes
+        let len = vector::length(bytes);
+        if (len > 8) { len = 8 };
 
-    public fun rand_u128_no_address(counter: &mut Counter, ctx: &mut TxContext): u128 { rand_u128_with_seed(seed_no_address(counter, ctx)) }
-    public fun rand_u128_range_no_address(counter: &mut Counter, low: u128, high: u128, ctx: &mut TxContext): u128 { rand_u128_range_with_seed(seed_no_address(counter, ctx), low, high) }
-    public fun rand_u64_no_address(counter: &mut Counter, ctx: &mut TxContext): u64 { rand_u64_with_seed(seed_no_address(counter, ctx)) }
-    public fun rand_u64_range_no_address(counter: &mut Counter, low: u64, high: u64, ctx: &mut TxContext): u64 { rand_u64_range_with_seed(seed_no_address(counter, ctx), low, high) }
+        let i = 0;
+        while (i < len) {
+            m = m << 8;
+            let byte = *vector::borrow(bytes, i);
+            m = m + (byte as u64);
+            i = i + 1;
+        };
 
-    public fun rand_u128_no_ctx(sender: &address, counter: &mut Counter): u128 { rand_u128_with_seed(seed_no_ctx(sender, counter)) }
-    public fun rand_u128_range_no_ctx(sender: &address, counter: &mut Counter, low: u128, high: u128): u128 { rand_u128_range_with_seed(seed_no_ctx(sender, counter), low, high) }
-    public fun rand_u64_no_ctx(sender: &address, counter: &mut Counter): u64 { rand_u64_with_seed(seed_no_ctx(sender, counter)) }
-    public fun rand_u64_range_no_ctx(sender: &address, counter: &mut Counter, low: u64, high: u64): u64 { rand_u64_range_with_seed(seed_no_ctx(sender, counter), low, high) }
+        m
+    }
 
-    public fun rand_u128_with_counter(counter: &mut Counter): u128 { rand_u128_with_seed(seed_with_counter(counter)) }
-    public fun rand_u128_range_with_counter(counter: &mut Counter, low: u128, high: u128): u128 { rand_u128_range_with_seed(seed_with_counter(counter), low, high) }
-    public fun rand_u64_with_counter(counter: &mut Counter): u64 { rand_u64_with_seed(seed_with_counter(counter)) }
-    public fun rand_u64_range_with_counter(counter: &mut Counter, low: u64, high: u64): u64 { rand_u64_range_with_seed(seed_with_counter(counter), low, high) }
+    /// Transpose bytes into `u64`
+    ///
+    /// Zero bytes will be used for vectors shorter than 16 bytes
+    public fun u128_from_bytes(bytes: &vector<u8>): u128 {
+        let m: u128 = 0;
 
-    public fun rand_u128_with_ctx(ctx: &mut TxContext): u128 { rand_u128_with_seed(seed_with_ctx(ctx)) }
-    public fun rand_u128_range_with_ctx(low: u128, high: u128, ctx: &mut TxContext): u128 { rand_u128_range_with_seed(seed_with_ctx(ctx), low, high) }
-    public fun rand_u64_with_ctx(ctx: &mut TxContext): u64 { rand_u64_with_seed(seed_with_ctx(ctx)) }
-    public fun rand_u64_range_with_ctx(low: u64, high: u64 ,ctx: &mut TxContext): u64 { rand_u64_range_with_seed(seed_with_ctx(ctx), low, high) }
+        // Cap length at 16 bytes
+        let len = vector::length(bytes);
+        if (len > 16) { len = 16 };
+
+        let i = 0;
+        while (i < len) {
+            m = m << 8;
+            let byte = *vector::borrow(bytes, i);
+            m = m + (byte as u128);
+            i = i + 1;
+        };
+
+        m
+    }
+
+    /// Transpose bytes into `u64`
+    ///
+    /// Zero bytes will be used for vectors shorter than 32 bytes
+    public fun u256_from_bytes(bytes: &vector<u8>): u256 {
+        let m: u256 = 0;
+
+        // Cap length at 16 bytes
+        let len = vector::length(bytes);
+        if (len > 32) { len = 32 };
+
+        let i = 0;
+        while (i < len) {
+            m = m << 8;
+            let byte = *vector::borrow(bytes, i);
+            m = m + (byte as u256);
+            i = i + 1;
+        };
+
+        m
+    }
 }
