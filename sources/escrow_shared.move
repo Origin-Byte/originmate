@@ -42,25 +42,25 @@ module originmate::escrow_shared {
     /// @dev Transfers escrowed object to the recipient.
     public entry fun transfer<T: key + store>(escrow: &mut Escrow<T>, ctx: &mut TxContext) {
         assert!(tx_context::sender(ctx) == escrow.sender, ENOT_SENDER);
-        transfer::transfer(option::extract(&mut escrow.obj), escrow.recipient);
+        transfer::public_transfer(option::extract(&mut escrow.obj), escrow.recipient);
     }
 
     /// @dev Refunds escrowed object to the sender.
     public entry fun refund<T: key + store>(escrow: &mut Escrow<T>, ctx: &mut TxContext) {
         assert!(tx_context::sender(ctx) == escrow.recipient, ENOT_RECIPIENT);
-        transfer::transfer(option::extract(&mut escrow.obj), escrow.sender);
+        transfer::public_transfer(option::extract(&mut escrow.obj), escrow.sender);
     }
 
     /// @dev Transfers escrowed object to the recipient.
     public entry fun transfer_arbitrated<T: key + store>(escrow: &mut Escrow<T>, ctx: &mut TxContext) {
         assert!(option::is_some(&escrow.arbitrator) && tx_context::sender(ctx) == *option::borrow(&escrow.arbitrator), ENOT_ARBITRATOR);
-        transfer::transfer(option::extract(&mut escrow.obj), escrow.recipient);
+        transfer::public_transfer(option::extract(&mut escrow.obj), escrow.recipient);
     }
 
     /// @dev Refunds escrowed object to the sender.
     public entry fun refund_arbitrated<T: key + store>(escrow: &mut Escrow<T>, ctx: &mut TxContext) {
         assert!(option::is_some(&escrow.arbitrator) && tx_context::sender(ctx) == *option::borrow(&escrow.arbitrator), ENOT_ARBITRATOR);
-        transfer::transfer(option::extract(&mut escrow.obj), escrow.sender);
+        transfer::public_transfer(option::extract(&mut escrow.obj), escrow.sender);
     }
 
     #[test_only]

@@ -543,7 +543,7 @@ module originmate::governance {
         test_scenario::return_shared(delegate_b_wrapper);
         test_scenario::return_shared(delegate_c_wrapper);
         test_scenario::return_shared(delegate_d_wrapper);
-        coin::destroy_for_testing(coin_in);
+        coin::burn_for_testing(coin_in);
         test_scenario::end(scenario_wrapper);
     }
 
@@ -633,7 +633,7 @@ module originmate::governance {
         test_scenario::return_shared(delegate_a_wrapper);
         test_scenario::return_shared(delegate_b_wrapper);
         test_scenario::return_shared(delegate_c_wrapper);
-        coin::destroy_for_testing(coin_in);
+        coin::burn_for_testing(coin_in);
         test_scenario::end(scenario_wrapper);
     }
 
@@ -715,7 +715,7 @@ module originmate::governance {
         test_scenario::return_shared(proposal_wrapper);
         test_scenario::return_shared(delegate_a_wrapper);
         test_scenario::return_shared(delegate_b_wrapper);
-        coin::destroy_for_testing(coin_in);
+        coin::burn_for_testing(coin_in);
         test_scenario::end(scenario_wrapper);
     }
 
@@ -766,7 +766,7 @@ module originmate::governance {
         // Return forum + destroy coins since we can't drop them
         test_scenario::return_shared(forum_wrapper);
         test_scenario::return_shared(delegate_a_wrapper);
-        coin::destroy_for_testing(coin_in);
+        coin::burn_for_testing(coin_in);
         test_scenario::end(scenario_wrapper);
     }
 }

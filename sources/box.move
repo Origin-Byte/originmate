@@ -23,7 +23,7 @@ module originmate::box {
             id: object::new(ctx),
             obj: obj_in
         };
-        transfer::transfer(box, recipient);
+        transfer::public_transfer(box, recipient);
     }
 
     /// @dev Unboxes the object inside the box.
@@ -44,7 +44,7 @@ module originmate::box {
             obj: obj_in,
             sender: tx_context::sender(ctx)
         };
-        transfer::transfer(box, recipient);
+        transfer::public_transfer(box, recipient);
     }
 
     /// @dev Unboxes the object inside the private box. (Private box = stores the sender in the sender property.)
