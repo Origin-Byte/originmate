@@ -16,4 +16,4 @@ subdir = "crates/sui-framework/packages/sui-framework"
 rev = "82c9c80c11488858f1d3930f47ec9f335a566683"
 
 [addresses]
-originmate = "0x0"
+originmate = "0xd5c5d99adb67cf9bf39c229e3fbc52cc0ed919ebb20262f0427e77dd2b86a3ee"
