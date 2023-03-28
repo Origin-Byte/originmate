@@ -152,7 +152,7 @@ module originmate::virtual_block {
         assert!(coin::value(&mempool_fees) == (1234000000 + 5678000000) - ((1234000000 + 5678000000) / 4), 2);
 
         // clean up: we can't drop coins so we burn them
-        coin::destroy_for_testing(mempool_fees);
+        coin::burn_for_testing(mempool_fees);
 
         // clean up: we can't drop mempool so we store it
         sui::transfer::transfer(TempMempool {

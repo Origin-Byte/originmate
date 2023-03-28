@@ -32,7 +32,7 @@ module originmate::escrow {
             obj: obj,
         } = escrow;
         object::delete(info);
-        transfer::transfer(obj, recipient);
+        transfer::public_transfer(obj, recipient);
     }
 
     #[test_only]
