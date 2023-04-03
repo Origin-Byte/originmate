@@ -8,7 +8,6 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 
 ## Modules
 
-- `acl`: Multi-role access control list (ACL).
 - `bcd`: Binary canonical Deserialization. Convert `vector<u8>` to `u64` and `u128`.
 - `bloom_filter`: Space-efficient probabilistic data structure for checking if an element is part of a set.
 - `box`: Transfer objects with the `store` ability but not the `key` ability.
@@ -17,7 +16,6 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 - `date`: Date conversion library in Move.
 - `escrow`: Basic object escrow module on Sui.
 - `escrow_shared`: Basic object escrow module with refunds and arbitration on Sui.
-- `governance`: On-chain coinholder governance (store coins and other objects).
 - `i64`: Signed 64-bit integers.
 - `i128`: Signed 128-bit integers.
 - `linear_vesting`: Linear vesting of coins for a given beneficiary.
@@ -28,7 +26,6 @@ Forked from: [pentagonxyz/movemate](https://github.com/pentagonxyz/movemate)
 - `pseudorandom`: Pseudorandom number generator.
 - `to_string`: `u128` to `String` conversion utilities.
 - `vectors`: Vector utilities--specifically, comparison operators and a binary search function.
-- `virtual_block`: Replace latency auctions with gas auctions (with control over MEV rewards) via virtual blocks.
 - `object_box`: An implementation of ObjectBag that constrains bag to holding only one object.
 - `object_vec`: An implementation ObjectTable that does not require a generic for key and it uses indexing.
 
