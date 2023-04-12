@@ -9,7 +9,7 @@ if [ -n "${env}" ]; then
     export $(echo "${env}" | xargs)
 fi
 
-budget="30000"
+budget="600000000"
 if [ -z "${GAS}" ]; then
     sui client publish --gas-budget "${budget}" .
 else
