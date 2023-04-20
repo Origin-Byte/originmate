@@ -7,7 +7,7 @@ authors = [
     "Michael Bausano <michael@originbyte.io>",
     "Nuno Boavida <nuno@originbyte.io>"
 ]
-published-at = "0xcc6b5a8e475e3fde4b517037a5c89f99523948f01019cc5e155b990c99ab2c9e"
+published-at = "0x86153b9305ae6aeefbf5f0cd98287eb561a90757a82571373458f303354c0b86"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
