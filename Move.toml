@@ -7,13 +7,13 @@ authors = [
     "Michael Bausano <michael@originbyte.io>",
     "Nuno Boavida <nuno@originbyte.io>"
 ]
-published-at = "0x0c1ed3b4527d0e828327239834b8dd969b4e58fca507cede4b964332a962be2b"
+published-at = "0x8dcb0eadc6a810cdb33291fea00aaac93f331e07f70d2135bf22b4aff9db423c"
 
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
 subdir = "crates/sui-framework/packages/sui-framework"
-# devnet-0.31.0
-rev = "a63f425b9999c7fdfe483598720a9effc0acdc9e"
+# devnet-1.1.0
+rev = "38c31cdd0f2ae3963d1e06f00c766cd7f90a7be6"
 
 [addresses]
-originmate = "0x0c1ed3b4527d0e828327239834b8dd969b4e58fca507cede4b964332a962be2b"
+originmate = "0x8dcb0eadc6a810cdb33291fea00aaac93f331e07f70d2135bf22b4aff9db423c"
