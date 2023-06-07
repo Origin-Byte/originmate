@@ -41,7 +41,7 @@ jobs:
           echo "Building packages"
           cd source
 
-          ./bin/build.sh remote
+          ./../sui move build
           cd ..
 
       - name: Copy registry to local fs
