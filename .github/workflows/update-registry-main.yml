@@ -52,7 +52,7 @@ jobs:
       - name: Update local Package Registry
         run: |
           echo "Registering under revision: ${{ github.sha }}"
-          ./source/bin/register-all.sh ${{ github.repository }} ${{ github.sha }} source/contracts remote registry-main.json
+          ./source/bin/register-all.sh ${{ github.repository }} ${{ github.sha }} source remote registry-main.json
 
       - name: Update remote registry
         run: |
