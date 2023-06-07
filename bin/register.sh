@@ -27,7 +27,7 @@ register() {
         stoml="stoml"
     fi
 
-    path="${source_folder}/${program}/Move.toml"
+    path="${source_folder}/Move.toml"
     name=$(${stoml} ${path} package.name)
     version=$(${stoml} ${path} package.version)
     publishedAt=$(${stoml} ${path} package.published-at)
