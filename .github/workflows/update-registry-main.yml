@@ -59,7 +59,7 @@ jobs:
         env:
           REVISION: ${{ github.event.inputs.revision || github.sha }}
         run: |
-          echo $(ls)
+          echo $(ls source)
           echo "Registering under revision: $REVISION"
           ./source/bin/register-all.sh ${{ github.repository }} $REVISION source remote registry-main.json
 
