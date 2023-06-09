@@ -12,7 +12,6 @@ set -e
 
 repo=$1
 rev=$2
-# "${3}/contracts"
 source_folder="${3}"
 registry_path="${5}"
 
@@ -25,7 +24,6 @@ else
 fi
 
 registry=$(jq '.' $registry_path)
-
 files=$(find $source_folder -name "Move.toml")
 
 for file in $files; do
