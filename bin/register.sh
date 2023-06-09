@@ -26,7 +26,7 @@ register() {
         stoml="stoml"
     fi
 
-    package_path="${source_folder}/${package_snake}/Move.toml"
+    package_path="${source_folder}/Move.toml"
     package_pascal=$(${stoml} ${package_path} package.name) # NftProtocol
     version=$(${stoml} ${package_path} package.version)
     publishedAt=$(${stoml} ${package_path} package.published-at)
