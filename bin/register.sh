@@ -43,7 +43,7 @@ register() {
         dep_snake=$(lowercase_to_snake_case ${DEP_LOWERCASE})
         dep_name_with_prefix=$(add_prefix ${dep_snake})
         dep_name=$(lowercase_to_pascal ${DEP_LOWERCASE})
-        obj_id="0x"$(parse_build_yaml ${package_snake} ${package_pascal} ${dep_name_with_prefix})
+        obj_id="0x"$(parse_build_yaml "" ${package_pascal} ${dep_name_with_prefix})
 
         # Check if the variable contains the element "local"
         if [[ "${entries[*]}" == *"local"* ]]; then
