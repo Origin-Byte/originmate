@@ -1,6 +1,6 @@
 [package]
 name = "Originmate"
-version = "3.0.0"
+version = "3.1.0"
 authors = [
     "David Lucid <david@pentagon.xyz>",
     "Jakub Labor <jakub@originbyte.io>",
@@ -12,8 +12,8 @@ published-at = "0x8b111cb401053b3b61ef37832cc16d0784a77c2c1058014ff7057ec4cf6f89
 [dependencies.Sui]
 git = "https://github.com/MystenLabs/sui.git"
 subdir = "crates/sui-framework/packages/sui-framework"
-# devnet-1.1.0
-rev = "38c31cdd0f2ae3963d1e06f00c766cd7f90a7be6"
+# testnet-1.2.0
+rev = "7ef210c6c11828ebafce973d815fa8cae63bc8c4"
 
 [addresses]
-originmate = "0x8b111cb401053b3b61ef37832cc16d0784a77c2c1058014ff7057ec4cf6f8932"
+originmate = "0x"
