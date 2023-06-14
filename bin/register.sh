@@ -86,7 +86,7 @@ register() {
             \"contractRef\": {
                 \"path\": {
                     \"git\": \"$git\", \
-                    \"subdir\": \"$package_snake\", \
+                    \"subdir\": "", \
                     \"rev\": \"$rev\" \
                 }, \
                 \"objectId\": \"$objectId\" \
