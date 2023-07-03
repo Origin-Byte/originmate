@@ -107,7 +107,7 @@ parse_build_yaml() {
     pascal_name="$2"
     mod_name="$3"
 
-    yaml_file="${source_folder}/${folder_name}/build/${pascal_name}/BuildInfo.yaml"
+    yaml_file="${source_folder}/build/${pascal_name}/BuildInfo.yaml"
 
     key_1="compiled_package_info"
     key_2="address_alias_instantiation"
